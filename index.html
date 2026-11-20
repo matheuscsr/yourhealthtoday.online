@@ -123,7 +123,7 @@
   </span><session-recorder></session-recorder><span>
 </span></div><span>
 </span></div><div id="ivsznr"><div id="ie1ayg"></div><div class="yht-video">
-<script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/4z460kgdpl.js" async type="module"></script><style>wistia-player[media-id='4z460kgdpl']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/4z460kgdpl/swatch'); display: block; filter: blur(5px); padding-top:56.25%; }</style> <wistia-player id="yht-vsl-player" media-id="4z460kgdpl" aspect="1.7777777777777777"></wistia-player>
+<script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/4z460kgdpl.js" async type="module"></script><style>wistia-player[media-id='4z460kgdpl']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/4z460kgdpl/swatch'); display: block; filter: blur(5px); padding-top:56.25%; }</style> <wistia-player id="yht-vsl-player" media-id="4z460kgdpl" aspect="1.7777777777777777" play-bar-control="false"></wistia-player>
 </div>
 <style>
   .esconder { display: none; }
@@ -135,22 +135,35 @@
   // 1535 = 25:35, momento do pitch na VSL do Wistia.
   var delaySeconds = 1535;
   (function () {
-    var storageKey = "yhtOfferShown_4z460kgdpl";
+    // Até onde este visitante já assistiu; usado só para impedir pular para frente.
+    var watchedKey = "yhtWatched_4z460kgdpl";
+    var maxWatched = 0;
+    try { maxWatched = parseFloat(localStorage.getItem(watchedKey)) || 0; } catch (e) {}
+    try { localStorage.removeItem("yhtOfferShown_4z460kgdpl"); } catch (e) {}
     var shown = false;
     function showOffer() {
       if (shown) return;
       shown = true;
       document.querySelectorAll(".esconder").forEach(function (el) { el.style.display = "block"; });
-      try { localStorage.setItem(storageKey, "1"); } catch (e) {}
     }
     document.addEventListener("DOMContentLoaded", function () {
-      var already = null;
-      try { already = localStorage.getItem(storageKey); } catch (e) {}
-      if (already === "1") { showOffer(); return; }
       var player = document.getElementById("yht-vsl-player");
       if (!player) return;
+      var lastSaved = 0;
       player.addEventListener("time-update", function () {
-        if (player.currentTime >= delaySeconds) showOffer();
+        var t = player.currentTime || 0;
+        if (t > maxWatched + 5) {            // tentou pular para frente: volta
+          player.currentTime = maxWatched;
+          return;
+        }
+        if (t > maxWatched) {
+          maxWatched = t;
+          if (t - lastSaved >= 5) {
+            lastSaved = t;
+            try { localStorage.setItem(watchedKey, String(Math.floor(t))); } catch (e) {}
+          }
+        }
+        if (t >= delaySeconds) showOffer();
       });
     });
   })();
