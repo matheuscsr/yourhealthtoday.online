@@ -93,25 +93,70 @@
 
                     </head>
     <body id="wrapper" data-brand-id="123">
+<style>
+  .yht-header { background: #ffffff; border-bottom: 1px solid #e3e7ee; box-shadow: 0 1px 3px rgba(16,32,64,.06); }
+  .yht-header-inner { max-width: 920px; margin: 0 auto; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-family: 'Poppins', Arial, sans-serif; }
+  .yht-brand { display: flex; align-items: center; gap: 10px; color: #12264d; font-size: 20px; font-weight: 700; letter-spacing: -.2px; line-height: 1; }
+  .yht-brand svg { width: 30px; height: 30px; flex: none; }
+  .yht-brand span span { color: #2949e5; }
+  .yht-tag { color: #5b6880; font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+  .yht-accent { height: 3px; background: linear-gradient(90deg, #12264d, #2949e5); }
+  @media (max-width: 520px) {
+    .yht-header-inner { padding: 10px 14px; }
+    .yht-brand { font-size: 17px; }
+    .yht-brand svg { width: 26px; height: 26px; }
+    .yht-tag { font-size: 10px; }
+  }
+</style>
+<header class="yht-header">
+  <div class="yht-header-inner">
+    <div class="yht-brand">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#2949e5"/><path d="M5 17h5.5l2.5-6 4.5 11 3-7 1.2 2H27" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>YourHealth<span>Today</span></span>
+    </div>
+    <div class="yht-tag">Men's Health</div>
+  </div>
+  <div class="yht-accent"></div>
+</header>
+
         
                         <div id="i8d2"><div id="i474wy"><span>
   </span><session-recorder></session-recorder><span>
 </span></div><span>
-</span></div><div id="ivsznr"><div id="ie1ayg"></div><p><vturb-smartplayer id="vid-69c8264d6983e3eba6d828b2" style="display: block; margin: 0 auto; width: 100%; max-width: 400px;"></vturb-smartplayer> <script type="text/javascript"> var s=document.createElement("script"); s.src="https://scripts.converteai.net/85efeeb2-8a29-4095-9fd0-e7bb984234a9/players/69c8264d6983e3eba6d828b2/v4/player.js", s.async=!0,document.head.appendChild(s); </script></p>
+</span></div><div id="ivsznr"><div id="ie1ayg"></div><div class="yht-video">
+<script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/4z460kgdpl.js" async type="module"></script><style>wistia-player[media-id='4z460kgdpl']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/4z460kgdpl/swatch'); display: block; filter: blur(5px); padding-top:56.25%; }</style> <wistia-player id="yht-vsl-player" media-id="4z460kgdpl" aspect="1.7777777777777777"></wistia-player>
+</div>
 <style>
   .esconder { display: none; }
+  .yht-video { width: 100%; max-width: 920px; margin: 0 auto; padding: 0 12px; }
 </style>
 
 <script>
-  var delaySeconds = 1422;
-  var player = document.querySelector("vturb-smartplayer");
-  player.addEventListener("player:ready", function() {
-    player.displayHiddenElements(delaySeconds, [".esconder"], {
-      persist: true
+  // Segundo do vídeo em que a oferta (botões de compra) aparece.
+  // 1650 = início do capítulo "Risk Free Guarantee and Pricing" da VSL no Wistia.
+  var delaySeconds = 1650;
+  (function () {
+    var storageKey = "yhtOfferShown_4z460kgdpl";
+    var shown = false;
+    function showOffer() {
+      if (shown) return;
+      shown = true;
+      document.querySelectorAll(".esconder").forEach(function (el) { el.style.display = "block"; });
+      try { localStorage.setItem(storageKey, "1"); } catch (e) {}
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+      var already = null;
+      try { already = localStorage.getItem(storageKey); } catch (e) {}
+      if (already === "1") { showOffer(); return; }
+      var player = document.getElementById("yht-vsl-player");
+      if (!player) return;
+      player.addEventListener("time-update", function () {
+        if (player.currentTime >= delaySeconds) showOffer();
+      });
     });
-  });
+  })();
 </script>
-  <style>
+<style>
 	body {
 	  font-family: 'Roboto', sans-serif;
 	  background-color: #f9f9f9;
@@ -125,23 +170,6 @@
 	  text-align: center;
 	  width: 100%;
 	  padding: 10px;
-	}
-	#counterWrapper {
-	  font-weight: bold;
-	  font-size: 16px;
-	  margin-bottom: 10px;
-	  display: flex;
-	  align-items: center;
-	  gap: 6px;
-	}
-	#viewsCount {
-	  font-size: 16px;
-	  color: #d9534f;
-	  font-weight: bold;
-	}
-	.live-icon {
-	  width: 18px;
-	  height: 18px;
 	}
 	#importantMessage {
 	  font-size: 14px;
@@ -161,33 +189,12 @@
   </style>
 
   <div id="counterContainer">
-	<div id="counterWrapper">
-	  <img src="https://cdn-icons-png.flaticon.com/512/159/159604.png" class="live-icon" alt="Live Viewers">
-	  <span id="viewsCount">71,712</span> 
-	  <span style="color: black;">people watching now</span>
-	</div>
 	<div id="importantMessage">
 	  🚨 IMPORTANT HEALTH UPDATE 🚨
 	  <br>
 	  <span class="loading">May take 10 seconds to load... Make sure your sound is on. 🔊</span>
 	</div>
   </div>
-  <script>
-	function getRandomInt(min, max) {
-	  return Math.floor(Math.random() * (max - min + 1) + min);
-	}
-	function updateCounter() {
-	  var currentCount = parseInt(document.getElementById('viewsCount').textContent.replace(/,/g, ''), 10);
-	  var increment = getRandomInt(1, 5);
-	  var nextCount = currentCount + increment;
-	  document.getElementById('viewsCount').textContent = nextCount.toLocaleString('en-US');
-	  var nextDelay = getRandomInt(1500, 3000);
-	  setTimeout(updateCounter, nextDelay);
-	}
-	document.getElementById('viewsCount').textContent = '71,712';
-	updateCounter();
-  </script>
-
 </div><div class="esconder"><div id="iwy30h"><div data-cid="1288"><div id="ixmz9s"><div id="iyim6r"><div id="c1288-ivltq2"><h1 id="c1288-c1116-i2gd-2-2-2">Claim your Discounted <div id="c1288-c1116-ij71nk"><b id="c1288-c1116-ix1sk">Men Balance Pro</b></div> Below<br/></h1><div id="c1288-c1116-idw7jo"><a href="https://travozilla.com/b?p=MBP2V1&nc=1&preview=1&b=123&fid=268&fnid=72&pfnid=1&pg=9207&template=2b&aff_id=118523&fb=1" data-href-code="e6abb6e89f7bc861cfcc747a5a2a4302" id="c1288-c1116-c914-c910-c409-c104-ie5udt-2-2-3-2" class="smartplayer-click-event"><div id="c1288-c1116-c914-c910-c409-c104-i91htm-2-2-2-2-3-2-2-2"><div id="c1288-c1116-c914-c910-c409-c104-iey6v5-2-2-2"><div id="c1288-c1116-c914-c910-c409-c104-ix1sko-2-2-2"><div id="c1288-c1116-c914-c910-c409-c104-iqwrxo-2-3-2-2-2"><div id="c1288-c1116-c914-c910-c409-c104-i4hey9-3-2-2-3-2-2-2" class="product-title"><b>BASIC</b></div></div></div><div id="c1288-c1116-c914-c910-c409-c104-i58668-2-2-2"><div id="c1288-c1116-c914-c910-c409-c104-iognh6-2-2-2"><div id="c1288-c1116-c914-c910-c409-c104-ifvq5b-2-2-2"><div id="c1288-c1116-c914-c910-c409-c104-ifty9y-2-2-2">
 </div>
 </div>
